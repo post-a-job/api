@@ -1,0 +1,29 @@
+{
+  "name": "moon-php/skeleton",
+  "license": "MIT",
+  "require": {
+    "php": ">=7.3",
+    "moon-php/moon": "^0.3",
+    "moon-php/container": "^0.1",
+    "guzzlehttp/psr7": "^1.4",
+    "monolog/monolog": "^1.23",
+    "vlucas/phpdotenv": "^2.4",
+    "spiral/roadrunner": "^1.4"
+  },
+  "authors": [
+    {
+      "name": "Damiano Petrungaro",
+      "email": "damianopetrungaro@gmail.cxom"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Undefined\\API\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Undefined012\\API\\": "tests/"
+    }
+  }
+}
