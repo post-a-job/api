@@ -2,10 +2,13 @@ version: '2.1'
 
 services:
   app:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
     ports:
-    - 80:80
-    entrypoint: /app/rr --config .rr.yaml -v serve
+      - 80:80
+    volumes:
+      - ./:/var/www/
     depends_on:
       postgres:
         condition: service_healthy
@@ -38,3 +41,4 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+
