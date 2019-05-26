@@ -5,8 +5,9 @@ RUN cd /go/src/github.com/spiral/roadrunner/ && make
 FROM composer:latest as composer
 FROM php:7.3.5-stretch as php
 WORKDIR /app
-RUN apt-get update
-RUN apt-get install -y git zip unzip
+RUN apt-get update && apt-get install -y git zip unzip libpq-dev
+RUN docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql
+RUN docker-php-ext-install pgsql pdo_pgsql
 COPY ./ /app
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 RUN composer install

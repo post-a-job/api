@@ -1,0 +1,18 @@
+includes:
+  - vendor/phpstan/phpstan/conf/config.levelmax.neon
+  - vendor/jangregor/phpstan-prophecy/src/extension.neon
+
+parameters:
+  ignoreErrors:
+    -
+        message: '#Cannot call method setAccessible() on ReflectionMethod|null.#'
+        path: %currentWorkingDirectory%/tests/Unit/TestCase.php
+    -
+        message: '#Cannot call method setAccessible() on ReflectionMethod|null.#'
+        path: %currentWorkingDirectory%/tests/Unit/Job/ValueObject/LocationTest.php
+    -
+        message: '#Cannot call method setAccessible() on ReflectionMethod|null.#'
+        path: %currentWorkingDirectory%/src/Job/Service/BuildLocation/DBQuery.php
+    -
+        message: '#Cannot call method rowCount() on Doctrine\DBAL\Driver\Statement|int.#'
+        path: %currentWorkingDirectory%/src/Job/Service/BuildLocation/DBQuery.php
