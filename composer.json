@@ -26,7 +26,8 @@
     "jangregor/phpstan-prophecy": "^0.3.0",
     "phpunit/phpunit": "^8.0",
     "fzaninotto/faker": "^1.8",
-    "league/factory-muffin": "^3.0"
+    "league/factory-muffin": "^3.0",
+    "behat/behat": "^3.5"
   },
   "authors": [
     {
@@ -47,7 +48,8 @@
   "scripts": {
     "inspire": "curl -s https://favqs.com/api/qotd | json_pp | awk -F ':[ \t]*' '/^.*\"body\"/ {print $2}'",
     "fix": "@php vendor/bin/php-cs-fixer fix --config=.php_cs.dist",
-    "tests": "@php vendor/bin/phpunit",
+    "unit-tests": "@php vendor/bin/phpunit",
+    "integration-tests": "@php vendor/bin/behat",
     "analyse": "@php vendor/bin/phpstan analyse src tests"
   },
   "scripts-descriptions": {

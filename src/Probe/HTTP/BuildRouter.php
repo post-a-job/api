@@ -15,8 +15,8 @@ final class BuildRouter
     public function __invoke(): Router
     {
         $router = new Router(self::PREFIX);
-        $router->post('[live][/]', Liveness::class);
-        $router->post('ready[/]', Readiness::class);
+        $router->get('[liveness][/]', Liveness::class);
+        $router->get('readiness[/]', Readiness::class);
 
         return $router;
     }

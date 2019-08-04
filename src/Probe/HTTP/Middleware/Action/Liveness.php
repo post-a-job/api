@@ -15,6 +15,6 @@ final class Liveness implements MiddlewareInterface
 {
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        return new Response(StatusCodeInterface::STATUS_OK, [], 'API are live!');
+        return new Response(StatusCodeInterface::STATUS_OK, [], \json_encode(['API are live']));
     }
 }
