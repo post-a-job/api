@@ -7,8 +7,8 @@ namespace PostAJob\API\Probe\Container;
 use PostAJob\API\Probe\HTTP\BuildRouter as BuildProbeRoute;
 use PostAJob\API\Probe\HTTP\Middleware\Action\Liveness as LivenessAction;
 use PostAJob\API\Probe\HTTP\Middleware\Action\Readiness as ReadinessAction;
-use PostAJob\API\Probe\HTTP\Middleware\RequestHandler\Liveness as LivenessRequestHandler;
-use PostAJob\API\Probe\HTTP\Middleware\RequestHandler\Readiness as ReadinessRequestHandler;
+use PostAJob\API\Probe\HTTP\Middleware\HandleRequest\Liveness as LivenessRequestHandler;
+use PostAJob\API\Probe\HTTP\Middleware\HandleRequest\Readiness as ReadinessRequestHandler;
 use Psr\Container\ContainerInterface;
 
 final class RetrieveEntries

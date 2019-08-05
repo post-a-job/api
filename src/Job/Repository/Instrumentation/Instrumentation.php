@@ -10,11 +10,21 @@ use Throwable;
 
 interface Instrumentation
 {
-    public function nextIDWasRetrieved(ID $id): void;
+    public function nextIDWasRetrieved(ID $ID): void;
 
     public function nextIDWasNotRetrieved(Throwable $e): void;
 
     public function jobWasAdded(Job $job): void;
 
     public function jobWasNotAdded(Throwable $e): void;
+
+    public function jobWasGet(ID $ID): void;
+
+    public function jobWasNotGet(ID $ID, Throwable $e): void;
+
+    public function rowWasMappedAsJob(array $row): void;
+
+    public function rowWasNotMappedAsJob(array $row, Throwable $e): void;
+
+    public function jobWasNotFound(ID $ID): void;
 }

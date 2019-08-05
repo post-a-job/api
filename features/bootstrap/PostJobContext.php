@@ -13,7 +13,7 @@ use Ramsey\Uuid\UuidInterface;
 /**
  * Defines application features from the specific context.
  */
-class JobContext implements Context
+class PostJobContext implements Context
 {
     /**
      * @var ResponseInterface
@@ -31,9 +31,9 @@ class JobContext implements Context
     private $body;
 
     /**
-     * @Given an HTTP :arg1 request with the URI :arg2 with the body
+     * @Given an HTTP :arg1 request to post a new job with the URI :arg2 with the body
      */
-    public function anHttpRequestWithTheUriWithTheBody(string $method, string $uri, PyStringNode $body): void
+    public function anHttpRequestToPostANewJobWithTheUriWithTheBody(string $method, string $uri, PyStringNode $body): void
     {
         $client = new Client();
         try {

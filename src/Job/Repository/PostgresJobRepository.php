@@ -5,29 +5,48 @@ declare(strict_types=1);
 namespace PostAJob\API\Job\Repository;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Types\ArrayType;
+use PDO;
 use PostAJob\API\Job\Job;
+use PostAJob\API\Job\Repository\Exception\JobDoesNotExists;
 use PostAJob\API\Job\Repository\Exception\UnexpectedFailureAddingAJob;
+use PostAJob\API\Job\Repository\Exception\UnexpectedFailureGettingAJob;
 use PostAJob\API\Job\Repository\Exception\UnexpectedFailureRetrievingNextID;
 use PostAJob\API\Job\Repository\Instrumentation\Instrumentation;
+use PostAJob\API\Job\Service\Map\ArrayToJob;
+use PostAJob\API\Job\Service\Map\JobToArray;
 use PostAJob\API\Job\ValueObject\ID;
 use Ramsey\Uuid\Uuid;
 use Throwable;
 
 final class PostgresJobRepository implements JobRepository
 {
-    private const DATE_TIME_FORMAT = 'Y-m-d H:i:s';
     /**
      * @var Connection
      */
     private $connection;
     /**
+     * @var JobToArray
+     */
+    private $mapJobToArray;
+    /**
+     * @var ArrayToJob
+     */
+    private $mapArrayToJob;
+    /**
      * @var Instrumentation
      */
     private $instrumentation;
 
-    public function __construct(Connection $connection, Instrumentation $instrumentation)
-    {
+    public function __construct(
+        Connection $connection,
+        JobToArray $mapJobToArray,
+        ArrayToJob $mapArrayToJob,
+        Instrumentation $instrumentation
+    ) {
         $this->connection = $connection;
+        $this->mapJobToArray = $mapJobToArray;
+        $this->mapArrayToJob = $mapArrayToJob;
         $this->instrumentation = $instrumentation;
     }
 
@@ -54,7 +73,23 @@ final class PostgresJobRepository implements JobRepository
     public function add(Job $job): void
     {
         try {
-            $this->connection->insert('jobs', $this->mapToArray($job));
+            $stmt = $this->connection->prepare(<<<EOF
+INSERT INTO jobs
+(id, title, description, company, locations, programming_languages, salary, posted_at,last_update)
+VALUES (:id,:title,:description,:company,:locations,:programming_languages,:salary,:posted_at,:last_update)
+EOF
+            );
+            $map = ($this->mapJobToArray)($job);
+            $stmt->bindValue(':id', $map['id']);
+            $stmt->bindValue(':title', $map['title']);
+            $stmt->bindValue(':description', $map['description']);
+            $stmt->bindValue(':company', $map['company']);
+            $stmt->bindValue(':locations', $map['locations'], ArrayType::JSON);
+            $stmt->bindValue(':programming_languages', $map['programming_languages'], ArrayType::JSON);
+            $stmt->bindValue(':salary', $map['salary'], ArrayType::JSON);
+            $stmt->bindValue(':posted_at', $map['posted_at']);
+            $stmt->bindValue(':last_update', $map['last_update']);
+            $stmt->execute();
         } catch (Throwable $e) {
             $this->instrumentation->jobWasNotAdded($e);
             throw new UnexpectedFailureAddingAJob($e);
@@ -64,20 +99,35 @@ final class PostgresJobRepository implements JobRepository
     }
 
     /**
-     * Can be extracted in a different object.
+     * @throws UnexpectedFailureGettingAJob
      */
-    private function mapToArray(Job $job): array
+    public function get(ID $ID): Job
     {
-        return [
-            'id' => $job->id()->value(),
-            'title' => $job->title()->value(),
-            'description' => $job->description()->value(),
-            'salary' => \json_encode($job->salary()->toArray()),
-            'company' => $job->company()->value(),
-            'locations' => \json_encode($job->location()->toArray()),
-            'programming_languages' => \json_encode($job->programmingLanguages()->toArray()),
-            'posted_at' => $job->postedAt()->format(self::DATE_TIME_FORMAT),
-            'last_update' => $job->lastUpdate() ? $job->lastUpdate()->format(self::DATE_TIME_FORMAT) : null,
-        ];
+        try {
+            $rawID = (string) $ID;
+            $stmt = $this->connection->prepare('SELECT * FROM jobs WHERE id = :id');
+            $stmt->bindValue(':id', $rawID);
+            $stmt->execute();
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (Throwable $e) {
+            $this->instrumentation->jobWasNotGet($ID, $e);
+            throw new UnexpectedFailureGettingAJob($ID, $e);
+        }
+
+        if (false === $row) {
+            $this->instrumentation->jobWasNotFound($ID);
+            throw new JobDoesNotExists($ID);
+        }
+
+        $this->instrumentation->jobWasGet($ID);
+        try {
+            $job = ($this->mapArrayToJob)($row);
+            $this->instrumentation->rowWasMappedAsJob($row);
+        } catch (Throwable $e) {
+            $this->instrumentation->rowWasNotMappedAsJob($row, $e);
+            throw new UnexpectedFailureGettingAJob($ID, $e);
+        }
+
+        return $job;
     }
 }

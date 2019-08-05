@@ -22,7 +22,7 @@ class Utils implements Context
      */
     public static function prepare(): void
     {
-        $env = new Dotenv(__DIR__.'/../../');
+        $env = new Dotenv(__DIR__.'/../');
         $env->load();
 
         self::$connection = DriverManager::getConnection([

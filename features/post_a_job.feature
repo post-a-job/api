@@ -4,7 +4,7 @@ Feature: Post a job
   I need to post a job application
 
   Scenario: Server returns a successful response the from post a job API
-    Given an HTTP "POST" request with the URI "http://localhost/jobs/" with the body
+    Given an HTTP "POST" request to post a new job with the URI "http://localhost/jobs/" with the body
     """
     {
        "title":"Chapter Lead",
@@ -29,7 +29,7 @@ Feature: Post a job
     And the database must have a record about the new job
 
   Scenario: Server returns a failure response the from post a job API when an empty request body
-    Given an HTTP "POST" request with the URI "http://localhost/jobs/" with the body
+    Given an HTTP "POST" request to post a new job with the URI "http://localhost/jobs/" with the body
     """
     """
     Then the post a job api must reply with a status code 400
@@ -52,7 +52,7 @@ Feature: Post a job
 
 
   Scenario: Server returns a failure response the from post a job API when a request body has all wrong (and too short) params
-    Given an HTTP "POST" request with the URI "http://localhost/jobs/" with the body
+    Given an HTTP "POST" request to post a new job with the URI "http://localhost/jobs/" with the body
     """
     {
       "title":"A",
@@ -86,7 +86,7 @@ Feature: Post a job
     And the post a job api must not add a location header with the job ID
 
   Scenario: Server returns a failure response the from post a job API when a request body has all wrong (and too long) params
-    Given an HTTP "POST" request with the URI "http://localhost/jobs/" with the body
+    Given an HTTP "POST" request to post a new job with the URI "http://localhost/jobs/" with the body
     """
     {
       "title":"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",

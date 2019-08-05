@@ -11,8 +11,6 @@ use PostAJob\API\Job\Service\BuildLocation\Exception\LocationsDoNotExist;
 use PostAJob\API\Job\Service\BuildLocation\Exception\UnexpectedFailure;
 use PostAJob\API\Job\ValueObject\Locations;
 use Psr\Log\LoggerInterface;
-use ReflectionClass;
-use ReflectionException;
 
 final class DBQuery implements BuildLocation
 {
@@ -25,10 +23,15 @@ final class DBQuery implements BuildLocation
      * @var LoggerInterface
      */
     private $logger;
+    /**
+     * @var BuildLocation
+     */
+    private $buildLocation;
 
-    public function __construct(Connection $connection, LoggerInterface $logger)
+    public function __construct(Connection $connection, BuildLocation $buildLocation, LoggerInterface $logger)
     {
         $this->logger = $logger;
+        $this->buildLocation = $buildLocation;
         $this->query = $connection->createQueryBuilder()->select()->from('cities')->where('name IN (?)')->setMaxResults(1);
     }
 
@@ -43,18 +46,6 @@ final class DBQuery implements BuildLocation
             throw new UnexpectedFailure($cities, $e);
         }
 
-        try {
-            $reflection = new ReflectionClass(Locations::class);
-        } catch (ReflectionException $e) {
-            throw new UnexpectedFailure($cities, $e);
-        }
-
-        $constructor = $reflection->getConstructor();
-        $constructor->setAccessible(true);
-        /** @var Locations $location */
-        $location = $reflection->newInstanceWithoutConstructor();
-        $constructor->invokeArgs($location, $cities);
-
-        return $location;
+        return ($this->buildLocation)($cities);
     }
 }

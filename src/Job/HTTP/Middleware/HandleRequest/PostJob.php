@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PostAJob\API\Job\HTTP\Middleware\RequestHandler;
+namespace PostAJob\API\Job\HTTP\Middleware\HandleRequest;
 
 use Moon\HttpMiddleware\Delegate;
 use PostAJob\API\Job\HTTP\Middleware\Action\PostJob as PostJobAction;

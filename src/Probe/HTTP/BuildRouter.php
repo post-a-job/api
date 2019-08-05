@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace PostAJob\API\Probe\HTTP;
 
 use Moon\Moon\Router;
-use PostAJob\API\Probe\HTTP\Middleware\RequestHandler\Liveness;
-use PostAJob\API\Probe\HTTP\Middleware\RequestHandler\Readiness;
+use PostAJob\API\Probe\HTTP\Middleware\HandleRequest\Liveness;
+use PostAJob\API\Probe\HTTP\Middleware\HandleRequest\Readiness;
 
 final class BuildRouter
 {
