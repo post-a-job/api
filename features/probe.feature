@@ -9,7 +9,7 @@ Feature: Server is up and running
     And the server must add a trace ID
     And the server must reply with a body:
       """
-      ["API are live"]
+      {"API":"Live","Database":"Reachable"}
       """
 
   Scenario: Server returns a successful response the from liveness probe URI reusing a trace ID
@@ -18,7 +18,7 @@ Feature: Server is up and running
     And the server must reply with the trace ID "a0os3jkcy"
     And the server must reply with a body:
       """
-      ["API are live"]
+      {"API":"Live","Database":"Reachable"}
       """
 
   Scenario: Server returns a successful response the from readiness probe URI
@@ -27,7 +27,7 @@ Feature: Server is up and running
     And the server must add a trace ID
     And the server must reply with a body:
       """
-      ["API are ready"]
+      {"API":"Ready","Database":"Reachable"}
       """
 
   Scenario: Server returns a 405 status code from the root URI with an invalid request method
