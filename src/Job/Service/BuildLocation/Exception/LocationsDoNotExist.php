@@ -8,7 +8,7 @@ use RuntimeException;
 
 final class LocationsDoNotExist extends RuntimeException
 {
-    private const ERROR_MESSAGE = 'The locations must exists. The given locations "%s" does not exists. If it exists contact us.';
+    private const ERROR_MESSAGE = 'One or more of the given locations "%s" does not exist. If it exists contact us.';
 
     public function __construct(array $locations)
     {

@@ -38,7 +38,7 @@ Feature: Post a job
     """
     {
        "company":"The company must not be empty.",
-       "locations":"The locations must exists. The given locations \"\" does not exists. If it exists contact us.",
+       "locations":"The locations must not be empty.",
        "programming_languages":"The programming language must not be empty.",
        "salary":{
           "currency":"Currency code should not be empty string",
@@ -73,7 +73,7 @@ Feature: Post a job
     """
     {
       "company":"The company must be at least 2 characters.",
-      "locations":"The locations must exists. The given locations \"\" does not exists. If it exists contact us.",
+      "locations":"The locations must not be empty.",
       "programming_languages":"The programming language must be supported. The given programming language \"RAMBOMAMBO\" is not supported yet.",
       "salary":{
         "currency":"Currency code should not be empty string",
@@ -108,7 +108,7 @@ Feature: Post a job
     {
       "company":"The company must be max 255 characters.",
       "description":"The description must be max 255 characters.",
-      "locations":"The locations must exists. The given locations \"NOT EXISTING\" does not exists. If it exists contact us.",
+      "locations":"One or more of the given locations \"NOT EXISTING\" does not exist. If it exists contact us.",
       "programming_languages":"The programming language must be supported. The given programming language \"RAMBOMAMBO\" is not supported yet.",
       "title":"The title must be max 255 characters."
     }

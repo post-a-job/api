@@ -18,6 +18,10 @@ class Locations
      */
     private function __construct(string ...$values)
     {
+        if (0 === \count($values)) {
+            throw new LocationIsEmpty();
+        }
+
         foreach ($values as $key => $value) {
             $value = \trim($value);
             if ('' === $value) {

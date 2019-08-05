@@ -32,13 +32,13 @@ final class DBQuery implements BuildLocation
     {
         $this->logger = $logger;
         $this->buildLocation = $buildLocation;
-        $this->query = $connection->createQueryBuilder()->select()->from('cities')->where('name IN (?)')->setMaxResults(1);
+        $this->query = $connection->createQueryBuilder()->select()->from('cities')->where('name IN (?)')->groupBy('name');
     }
 
     public function __invoke(array $cities): Locations
     {
         try {
-            if (1 !== $this->query->setParameter(0, $cities, Connection::PARAM_STR_ARRAY)->execute()->rowCount()) {
+            if (\count($cities) !== $this->query->setParameter(0, $cities, Connection::PARAM_STR_ARRAY)->execute()->rowCount()) {
                 throw new LocationsDoNotExist($cities);
             }
         } catch (DBALException $e) {
