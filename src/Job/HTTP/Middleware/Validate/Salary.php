@@ -31,27 +31,24 @@ final class Salary implements MiddlewareInterface
             $failures = $request->getAttribute(RequestMiddlewareInterface::FAILURE_ATTRIBUTE_NAME, []);
             $failures[self::KEY][self::CURRENCY] = $e->getMessage();
             $request = $request->withAttribute(RequestMiddlewareInterface::FAILURE_ATTRIBUTE_NAME, $failures);
-
-            return $handler->handle($request);
         }
-
         try {
-            $min = new Money($body[self::KEY][self::MIN] ?? '', $currency);
+            $min = new Money($body[self::KEY][self::MIN] ?? '', $currency ?? new Currency('USD'));
         } catch (\InvalidArgumentException $e) {
             $failures = $request->getAttribute(RequestMiddlewareInterface::FAILURE_ATTRIBUTE_NAME, []);
             $failures[self::KEY][self::MIN] = $e->getMessage();
             $request = $request->withAttribute(RequestMiddlewareInterface::FAILURE_ATTRIBUTE_NAME, $failures);
-
-            return $handler->handle($request);
         }
 
         try {
-            $max = new Money($body[self::KEY][self::MAX] ?? '', $currency);
+            $max = new Money($body[self::KEY][self::MAX] ?? '', $currency ?? new Currency('USD'));
         } catch (\InvalidArgumentException $e) {
             $failures = $request->getAttribute(RequestMiddlewareInterface::FAILURE_ATTRIBUTE_NAME, []);
             $failures[self::KEY][self::MAX] = $e->getMessage();
             $request = $request->withAttribute(RequestMiddlewareInterface::FAILURE_ATTRIBUTE_NAME, $failures);
+        }
 
+        if (!isset($min, $max, $currency)) {
             return $handler->handle($request);
         }
 

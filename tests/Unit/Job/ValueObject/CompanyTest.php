@@ -6,10 +6,48 @@ namespace PostAJob\API\Job\ValueObject;
 
 use Error;
 use PostAJob\API\Job\ValueObject\Exception\CompanyIsEmpty;
+use PostAJob\API\Job\ValueObject\Exception\CompanyIsTooLong;
+use PostAJob\API\Job\ValueObject\Exception\CompanyIsTooShort;
 use PostAJob\API\TestCase;
 
 final class CompanyTest extends TestCase
 {
+    /**
+     * @test
+     * @dataProvider tooLongCompanyValue
+     */
+    public function should_thrown_a_company_is_too_long_exception(string $value): void
+    {
+        $this->expectException(CompanyIsTooLong::class);
+        new Company($value);
+    }
+
+    public function tooLongCompanyValue(): array
+    {
+        return [
+            ['values' => 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'],
+            ['values' => '  AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA '],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider tooShortCompanyValue
+     */
+    public function should_thrown_a_company_is_too_short_exception(string $value): void
+    {
+        $this->expectException(CompanyIsTooShort::class);
+        new Company($value);
+    }
+
+    public function tooShortCompanyValue(): array
+    {
+        return [
+            ['values' => 'a'],
+            ['values' => '  s '],
+        ];
+    }
+
     /**
      * @test
      * @dataProvider invalidCompanyValue
@@ -55,8 +93,8 @@ final class CompanyTest extends TestCase
      */
     public function should_return_false_when_comparing_different_objects(): void
     {
-        $company1 = new Company('a');
-        $company2 = new Company('b');
+        $company1 = new Company('Google');
+        $company2 = new Company('Amazon');
         $this->assertFalse($company1->equals($company2));
     }
 

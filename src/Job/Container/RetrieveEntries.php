@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PostAJob\API\Job\Container;
 
+use Doctrine\DBAL\Connection;
 use PostAJob\API\Job\HTTP\BuildRouter as BuildJobRouter;
 use PostAJob\API\Job\HTTP\Middleware\Action\PostJob as PostJobAction;
 use PostAJob\API\Job\HTTP\Middleware\Failure\BadRequest as BadRequestMiddleware;
@@ -26,17 +27,12 @@ use Psr\Log\LoggerInterface;
 final class RetrieveEntries
 {
     /**
-     * @var string
-     */
-    private $connectionClassName;
-    /**
      * @var array
      */
     private $commonMiddlewareClassNames;
 
-    public function __construct(string $connectionClassName, array $commonMiddlewareClassNames)
+    public function __construct(array $commonMiddlewareClassNames)
     {
-        $this->connectionClassName = $connectionClassName;
         $this->commonMiddlewareClassNames = $commonMiddlewareClassNames;
     }
 
@@ -74,9 +70,9 @@ final class RetrieveEntries
             return new DescriptionValidationMiddleware();
         };
 
-        $entries[LocationsValidationMiddleware::class] = function (ContainerInterface $container): LocationsValidationMiddleware {
+        $entries[LocationsValidationMiddleware::class] = static function (ContainerInterface $container): LocationsValidationMiddleware {
             return new LocationsValidationMiddleware(
-                new DBQuery($container->get($this->connectionClassName), $container->get(LoggerInterface::class))
+                new DBQuery($container->get(Connection::class), $container->get(LoggerInterface::class))
             );
         };
 
@@ -100,9 +96,9 @@ final class RetrieveEntries
             return new DefaultInstrumentation($container->get(LoggerInterface::class));
         };
 
-        $entries[PostgresJobRepository::class] = function (ContainerInterface $container): PostgresJobRepository {
+        $entries[PostgresJobRepository::class] = static function (ContainerInterface $container): PostgresJobRepository {
             return new PostgresJobRepository(
-                $container->get($this->connectionClassName),
+                $container->get(Connection::class),
                 $container->get(Instrumentation::class),
                 );
         };

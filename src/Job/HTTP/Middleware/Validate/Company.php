@@ -7,6 +7,8 @@ namespace PostAJob\API\Job\HTTP\Middleware\Validate;
 use PostAJob\API\Job\HTTP\Middleware\RequestMiddlewareInterface;
 use PostAJob\API\Job\ValueObject\Company as CompanyVO;
 use PostAJob\API\Job\ValueObject\Exception\CompanyIsEmpty;
+use PostAJob\API\Job\ValueObject\Exception\CompanyIsTooLong;
+use PostAJob\API\Job\ValueObject\Exception\CompanyIsTooShort;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -21,7 +23,7 @@ final class Company implements MiddlewareInterface
         try {
             $body = \json_decode((string) $request->getBody(), true) ?: [];
             $company = new CompanyVO($body[self::KEY] ?? '');
-        } catch (CompanyIsEmpty $e) {
+        } catch (CompanyIsEmpty | CompanyIsTooShort | CompanyIsTooLong $e) {
             $failures = $request->getAttribute(RequestMiddlewareInterface::FAILURE_ATTRIBUTE_NAME, []);
             $failures[self::KEY] = $e->getMessage();
             $request = $request->withAttribute(RequestMiddlewareInterface::FAILURE_ATTRIBUTE_NAME, $failures);

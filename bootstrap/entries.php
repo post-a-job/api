@@ -98,6 +98,6 @@ $entries[Connection::class] = static function (ContainerInterface $container): C
 
 $tracingEntries = new TraceEntries();
 $probeEntries = new ProbeEntries([TracingAction::class]);
-$jobEntries = new JobEntries(Connection::class, [TracingAction::class]);
+$jobEntries = new JobEntries([TracingAction::class]);
 
 return \array_merge($entries, $tracingEntries(), $probeEntries(), $jobEntries());

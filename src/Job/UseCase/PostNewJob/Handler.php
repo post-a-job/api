@@ -9,6 +9,7 @@ use PostAJob\API\Job\Repository\Exception\UnexpectedFailureAddingAJob;
 use PostAJob\API\Job\Repository\Exception\UnexpectedFailureRetrievingNextID;
 use PostAJob\API\Job\Repository\JobRepository;
 use PostAJob\API\Job\UseCase\PostNewJob\Exception\UnexpectedFailurePostingAJob;
+use PostAJob\API\Job\ValueObject\ID;
 
 final class Handler
 {
@@ -25,7 +26,7 @@ final class Handler
     /**
      * @throws UnexpectedFailurePostingAJob
      */
-    public function __invoke(Command $command): void
+    public function __invoke(Command $command): ID
     {
         try {
             $id = $this->repository->nextID();
@@ -48,5 +49,7 @@ final class Handler
         } catch (UnexpectedFailureAddingAJob $e) {
             throw new UnexpectedFailurePostingAJob($e);
         }
+
+        return $id;
     }
 }

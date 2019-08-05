@@ -15,7 +15,7 @@ final class ProgrammingLanguageIsNotSupportedTest extends TestCase
     {
         $exception = new ProgrammingLanguagesIsNotSupported('PHP');
         $this->assertSame(
-            'The programming language must be supported. The given programming language  "PHP" is not supported yet.',
+            'The programming language must be supported. The given programming language "PHP" is not supported yet.',
             $exception->getMessage()
         );
     }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PostAJob\API\Job\ValueObject;
 
 use PostAJob\API\Job\ValueObject\Exception\ProgrammingLanguagesIsDuplicated;
+use PostAJob\API\Job\ValueObject\Exception\ProgrammingLanguagesIsEmpty;
 use PostAJob\API\Job\ValueObject\Exception\ProgrammingLanguagesIsNotSupported;
 
 final class ProgrammingLanguages
@@ -36,6 +37,10 @@ final class ProgrammingLanguages
                 throw new ProgrammingLanguagesIsDuplicated($programmingLanguage);
             }
             $map[] = $programmingLanguage;
+        }
+
+        if (0 === \count($programmingLanguages)) {
+            throw new ProgrammingLanguagesIsEmpty();
         }
 
         $this->programmingLanguages = $programmingLanguages;

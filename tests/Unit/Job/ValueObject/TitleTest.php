@@ -6,13 +6,51 @@ namespace PostAJob\API\Job\ValueObject;
 
 use Error;
 use PostAJob\API\Job\ValueObject\Exception\TitleIsEmpty;
+use PostAJob\API\Job\ValueObject\Exception\TitleIsTooLong;
+use PostAJob\API\Job\ValueObject\Exception\TitleIsTooShort;
 use PostAJob\API\TestCase;
 
 final class TitleTest extends TestCase
 {
     /**
      * @test
-     * @dataProvider invalidTitleValue
+     * @dataProvider tooLongTitleValue
+     */
+    public function should_thrown_a_title_is_too_long_exception(string $value): void
+    {
+        $this->expectException(TitleIsTooLong::class);
+        new Title($value);
+    }
+
+    public function tooLongTitleValue(): array
+    {
+        return [
+            ['values' => 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'],
+            ['values' => '  AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA '],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider tooShortTitleValue
+     */
+    public function should_thrown_a_title_is_too_short_exception(string $value): void
+    {
+        $this->expectException(TitleIsTooShort::class);
+        new Title($value);
+    }
+
+    public function tooShortTitleValue(): array
+    {
+        return [
+            ['values' => ' a '],
+            ['values' => ' s '],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider emptyTitleValue
      */
     public function should_thrown_a_title_is_empty_exception(string $value): void
     {
@@ -20,7 +58,7 @@ final class TitleTest extends TestCase
         new Title($value);
     }
 
-    public function invalidTitleValue(): array
+    public function emptyTitleValue(): array
     {
         return [
             ['values' => ''],
@@ -55,8 +93,8 @@ final class TitleTest extends TestCase
      */
     public function should_return_false_when_comparing_different_objects(): void
     {
-        $title1 = new Title('a');
-        $title2 = new Title('b');
+        $title1 = new Title('Tech Lead');
+        $title2 = new Title('Senior Software Engineer');
         $this->assertFalse($title1->equals($title2));
     }
 

@@ -8,7 +8,7 @@ use InvalidArgumentException;
 
 final class ProgrammingLanguagesIsNotSupported extends InvalidArgumentException
 {
-    private const ERROR_MESSAGE = 'The programming language must be supported. The given programming language  "%s" is not supported yet.';
+    private const ERROR_MESSAGE = 'The programming language must be supported. The given programming language "%s" is not supported yet.';
 
     public function __construct(string $unsupportedLanguage)
     {
