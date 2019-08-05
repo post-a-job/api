@@ -13,7 +13,7 @@ final class JobToArray
     public function __invoke(Job $job): array
     {
         return [
-            'id' => $job->id()->value(),
+            'id' => $job->ID()->value(),
             'title' => $job->title()->value(),
             'description' => $job->description()->value(),
             'salary' => $job->salary()->toArray(),

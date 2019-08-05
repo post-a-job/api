@@ -18,7 +18,7 @@ final class Job
     /**
      * @var ID
      */
-    private $id;
+    private $ID;
 
     /**
      * @var Title
@@ -61,7 +61,7 @@ final class Job
     private $lastUpdate;
 
     public function __construct(
-        ID $id,
+        ID $ID,
         Title $title,
         Description $description,
         Salary $salary,
@@ -71,7 +71,7 @@ final class Job
         DateTimeImmutable $postedAt,
         ?DateTimeImmutable $updatedAt
     ) {
-        $this->id = $id;
+        $this->ID = $ID;
         $this->title = $title;
         $this->description = $description;
         $this->salary = $salary;
@@ -83,7 +83,7 @@ final class Job
     }
 
     public static function post(
-        ID $id,
+        ID $ID,
         Title $title,
         Description $description,
         Salary $salary,
@@ -93,12 +93,12 @@ final class Job
     ): self {
         $postedAt = new DateTimeImmutable();
 
-        return new self($id, $title, $description, $salary, $company, $location, $programmingLanguages, $postedAt, null);
+        return new self($ID, $title, $description, $salary, $company, $location, $programmingLanguages, $postedAt, null);
     }
 
     public function id(): ID
     {
-        return $this->id;
+        return $this->ID;
     }
 
     public function title(): Title

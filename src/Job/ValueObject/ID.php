@@ -43,9 +43,9 @@ final class ID
         return $this->value->toString();
     }
 
-    public function equals(self $id): bool
+    public function equals(self $ID): bool
     {
-        return $this->value->equals($id->value);
+        return $this->value->equals($ID->value);
     }
 
     private function __clone()

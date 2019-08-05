@@ -56,15 +56,15 @@ final class PostgresJobRepository implements JobRepository
     public function nextID(): ID
     {
         try {
-            $id = ID::fromString(Uuid::uuid4()->toString());
+            $ID = ID::fromString(Uuid::uuid4()->toString());
         } catch (Throwable $e) {
             $this->instrumentation->nextIDWasNotRetrieved($e);
             throw new UnexpectedFailureRetrievingNextID($e);
         }
 
-        $this->instrumentation->nextIDWasRetrieved($id);
+        $this->instrumentation->nextIDWasRetrieved($ID);
 
-        return $id;
+        return $ID;
     }
 
     /**

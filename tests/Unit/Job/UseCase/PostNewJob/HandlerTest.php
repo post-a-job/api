@@ -46,19 +46,19 @@ final class HandlerTest extends TestCase
      */
     public function should_return_unexpected_failure_posting_a_job_when_an_error_occurs_retrieving_adding_job_to_the_repository(): void
     {
-        /** @var ID $id */
-        $id = $this->factoryFaker->instance(ID::class);
+        /** @var ID $ID */
+        $ID = $this->factoryFaker->instance(ID::class);
 
         /** @var Command $command */
         $command = $this->factoryFaker->instance(Command::class);
 
         $repository = $this->prophesize(JobRepository::class);
-        $repository->nextID()->willReturn($id);
+        $repository->nextID()->willReturn($ID);
         $those = $this;
-        $repository->add(Argument::type(Job::class))->will(function (array $params) use ($id, $command, $those) {
+        $repository->add(Argument::type(Job::class))->will(function (array $params) use ($ID, $command, $those) {
             /** @var Job $job */
             $job = $params[0];
-            $those->assertSame($id, $job->id());
+            $those->assertSame($ID, $job->ID());
             $those->assertSame($command->title(), $job->title());
             $those->assertSame($command->description(), $job->description());
             $those->assertSame($command->salary(), $job->salary());
@@ -87,18 +87,18 @@ final class HandlerTest extends TestCase
      */
     public function should_add_a_new_job_to_the_repository(): void
     {
-        /** @var ID $id */
-        $id = $this->factoryFaker->instance(ID::class);
+        /** @var ID $ID */
+        $ID = $this->factoryFaker->instance(ID::class);
 
         /** @var Command $command */
         $command = $this->factoryFaker->instance(Command::class);
 
         $repository = $this->prophesize(JobRepository::class);
-        $repository->nextID()->willReturn($id);
+        $repository->nextID()->willReturn($ID);
         $those = $this;
-        $repository->add(Argument::type(Job::class))->will(function (array $params) use ($id, $command, $those) {
+        $repository->add(Argument::type(Job::class))->will(function (array $params) use ($ID, $command, $those) {
             $job = $params[0];
-            $those->assertSame($id, $job->id());
+            $those->assertSame($ID, $job->ID());
             $those->assertSame($command->title(), $job->title());
             $those->assertSame($command->description(), $job->description());
             $those->assertSame($command->salary(), $job->salary());

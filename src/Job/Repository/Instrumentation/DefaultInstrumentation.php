@@ -33,7 +33,7 @@ final class DefaultInstrumentation implements Instrumentation
 
     public function jobWasAdded(Job $job): void
     {
-        $this->logger->info('job was added', ['id' => (string) $job->id()]);
+        $this->logger->info('job was added', ['id' => (string) $job->ID()]);
     }
 
     public function jobWasNotAdded(Throwable $e): void

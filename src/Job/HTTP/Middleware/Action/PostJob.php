@@ -42,8 +42,8 @@ final class PostJob implements MiddlewareInterface
             $request->getAttribute(ProgrammingLanguages::class),
             );
 
-        $id = ($this->handler)($command);
+        $ID = ($this->handler)($command);
 
-        return new Response(StatusCodeInterface::STATUS_CREATED, ['Location' => "/jobs/$id"]);
+        return new Response(StatusCodeInterface::STATUS_CREATED, ['Location' => "/jobs/$ID"]);
     }
 }

@@ -21,8 +21,8 @@ final class JobTest extends TestCase
      */
     public function should_return_the_same_properties_that_have_been_injected(): void
     {
-        /** @var ID $id */
-        $id = $this->factoryFaker->instance(ID::class);
+        /** @var ID $ID */
+        $ID = $this->factoryFaker->instance(ID::class);
         /** @var Title $title */
         $title = $this->factoryFaker->instance(Title::class);
         /** @var Description $description */
@@ -36,8 +36,8 @@ final class JobTest extends TestCase
         /** @var ProgrammingLanguages $programmingLanguages */
         $programmingLanguages = $this->factoryFaker->instance(ProgrammingLanguages::class);
 
-        $job = Job::post($id, $title, $description, $salary, $company, $location, $programmingLanguages);
-        $this->assertSame($id, $job->id());
+        $job = Job::post($ID, $title, $description, $salary, $company, $location, $programmingLanguages);
+        $this->assertSame($ID, $job->ID());
         $this->assertSame($title, $job->title());
         $this->assertSame($description, $job->description());
         $this->assertSame($salary, $job->salary());

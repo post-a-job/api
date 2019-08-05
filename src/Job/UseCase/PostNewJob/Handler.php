@@ -29,13 +29,13 @@ final class Handler
     public function __invoke(Command $command): ID
     {
         try {
-            $id = $this->repository->nextID();
+            $ID = $this->repository->nextID();
         } catch (UnexpectedFailureRetrievingNextID $e) {
             throw new UnexpectedFailurePostingAJob($e);
         }
 
         $job = Job::post(
-            $id,
+            $ID,
             $command->title(),
             $command->description(),
             $command->salary(),
@@ -50,6 +50,6 @@ final class Handler
             throw new UnexpectedFailurePostingAJob($e);
         }
 
-        return $id;
+        return $ID;
     }
 }
